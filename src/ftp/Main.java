@@ -11,6 +11,7 @@ public class Main {
         Menu menu = new Menu();
         menu.setVisible(true);
         menu.setLocationRelativeTo(null);
+        System.out.println("Hola mundo");
     }
     
 }
