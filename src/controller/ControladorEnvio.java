@@ -3,21 +3,26 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import view.Menu;
 import view.VentanaEnvio;
 
 public class ControladorEnvio implements ActionListener{
     VentanaEnvio ventanaE;
+    Menu m;
+    String textoConsola;
 
-    public ControladorEnvio(VentanaEnvio ventanaE) {
+    public ControladorEnvio(VentanaEnvio ventanaE,Menu m) {
         this.ventanaE = ventanaE;
+        this.m=m;
         this.ventanaE.setVisible(true);
         this.ventanaE.BotonStart.addActionListener(this);
+        this.ventanaE.BotonVolver.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==this.ventanaE.BotonStart){
-            System.out.println("hola");
+            ventanaE.TextoConsola.setText("");
             String texto = this.ventanaE.Texto.getText();        
             String codigoBinario = "";//guarda el en binario
             for (int i = 0; i < texto.length(); i++) {//recorre el texto ingresado
@@ -36,9 +41,18 @@ public class ControladorEnvio implements ActionListener{
                 codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
             }
             this.ventanaE.TextoBinario.setText(codigoBinario);/*imprime el codigo binario completo*/
-            
+            textoConsola="*/ Mensaje transformado a Binario "+"\n"+"*/ Enviando ";
+            this.ventanaE.TextoConsola.setText(textoConsola);
+        }
+        
+        if(e.getSource()==this.ventanaE.BotonVolver){
+            System.out.println("hola");
+            this.ventanaE.dispose();
+            this.m.setVisible(true);
         }
     }
+    
+    
     
     
     

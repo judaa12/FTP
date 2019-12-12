@@ -20,7 +20,7 @@ public class ControladorMenu implements ActionListener{
         if(e.getSource()==this.m.BotonSalir) System.exit(0);
         if(e.getSource()==this.m.BotonEnviar){
             VentanaEnvio vEnvio = new VentanaEnvio();
-            ControladorEnvio cEnvio = new ControladorEnvio(vEnvio);
+            ControladorEnvio cEnvio = new ControladorEnvio(vEnvio,m);
             this.m.setVisible(false);
         }
     }

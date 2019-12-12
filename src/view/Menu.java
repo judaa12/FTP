@@ -43,8 +43,11 @@ public class Menu extends javax.swing.JFrame {
         BotonSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         PanelPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        PanelPrincipal.setPreferredSize(new java.awt.Dimension(1280, 720));
+        PanelPrincipal.setRequestFocusEnabled(false);
 
         PanelTitulo.setPreferredSize(new java.awt.Dimension(1280, 100));
         PanelTitulo.setLayout(new java.awt.GridLayout(1, 0));
@@ -60,7 +63,7 @@ public class Menu extends javax.swing.JFrame {
         LabelImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/msg.jpg"))); // NOI18N
         PanelFondo.add(LabelImagen);
 
-        PanelBoton.setPreferredSize(new java.awt.Dimension(1280, 200));
+        PanelBoton.setPreferredSize(new java.awt.Dimension(1280, 150));
         PanelBoton.setLayout(new java.awt.GridLayout(1, 2, 100, 0));
 
         BotonEnviar.setBackground(new java.awt.Color(255, 255, 255));
@@ -91,7 +94,7 @@ public class Menu extends javax.swing.JFrame {
         PanelBotonEnviarLayout.setVerticalGroup(
             PanelBotonEnviarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelBotonEnviarLayout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BotonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49))
         );
@@ -126,9 +129,9 @@ public class Menu extends javax.swing.JFrame {
         PanelBotonSalirLayout.setVerticalGroup(
             PanelBotonSalirLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelBotonSalirLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addContainerGap()
                 .addComponent(BotonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         PanelBoton.add(PanelBotonSalir);
