@@ -9,8 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import view.Menu;
 import view.VentanaEnvio;
 
@@ -113,8 +111,9 @@ public class ControladorEnvio implements Runnable, ActionListener{
                 Socket sock = socket.accept();//Se espera a que exista una conexion
                 DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
                 String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
-                this.ventanaE.TextoBinario.setText(mensaje);//Se muestra en pantalla el mensaje recibido
+                this.ventanaE.TextoBinario.setText("Entrada\n"+mensaje);//Se muestra en pantalla el mensaje recibido
                 textoConsola="*/ Recibido "+"\n"+"*/ Transformando a texto ";
+                this.ventanaE.TextoConsola.setText(textoConsola);
                 sock.close();//Se cierra la conexion con el cliente
             }
 
