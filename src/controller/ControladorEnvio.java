@@ -1,22 +1,36 @@
 
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import view.Menu;
 import view.VentanaEnvio;
 
-public class ControladorEnvio implements ActionListener{
+public class ControladorEnvio implements Runnable, ActionListener{
     VentanaEnvio ventanaE;
     Menu m;
     String textoConsola;
-
+    String Host="localhost";
+    int port=555;
     public ControladorEnvio(VentanaEnvio ventanaE,Menu m) {
         this.ventanaE = ventanaE;
         this.m=m;
         this.ventanaE.setVisible(true);
         this.ventanaE.BotonStart.addActionListener(this);
         this.ventanaE.BotonVolver.addActionListener(this);
+        iniciar();
+    }
+    private void iniciar(){
+        Thread hilo=new Thread(this);
+        hilo.start();
     }
 
     @Override
@@ -43,6 +57,20 @@ public class ControladorEnvio implements ActionListener{
             this.ventanaE.TextoBinario.setText(codigoBinario);/*imprime el codigo binario completo*/
             textoConsola="*/ Mensaje transformado a Binario "+"\n"+"*/ Enviando ";
             this.ventanaE.TextoConsola.setText(textoConsola);
+            
+            
+            try {
+                
+                Socket sock=new Socket(this.Host,this.port);//Se crea el socket con el puerto y la direccion del otro computador
+                
+                DataOutputStream salida=new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+                salida.writeUTF(this.ventanaE.TextoBinario.getText());//Se envia el texto en binario
+                //principal.txtArea.append("\n" + principal.txtChat.getText());
+                salida.close();//Se cierra la conexion
+                
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
         
         if(e.getSource()==this.ventanaE.BotonVolver){
@@ -76,5 +104,24 @@ public class ControladorEnvio implements ActionListener{
         }
         return String.valueOf(Binario + x);//devuelve el binario resultante mas el ultimo bit
     }    
+
+    @Override
+    public void run() {
+        try {
+            ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
+            while (true) {
+                Socket sock = socket.accept();//Se espera a que exista una conexion
+                DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
+                String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
+                this.ventanaE.TextoBinario.setText(mensaje);//Se muestra en pantalla el mensaje recibido
+                textoConsola="*/ Recibido "+"\n"+"*/ Transformando a texto ";
+                sock.close();//Se cierra la conexion con el cliente
+            }
+
+            //System.out.println("hola");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
     
 }

@@ -1,8 +1,13 @@
 
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import view.Menu;
 import view.VentanaEnvio;
 
@@ -24,8 +29,6 @@ public class ControladorMenu implements ActionListener{
             this.m.setVisible(false);
         }
     }
-    
-    
     
     
 }
