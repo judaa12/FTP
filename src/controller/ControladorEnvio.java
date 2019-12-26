@@ -65,6 +65,8 @@ public class ControladorEnvio implements Runnable, ActionListener {
                 Socket sock = new Socket("192.168.100.17", this.port);//Se crea el socket con el puerto y la direccion del otro computador
 
                 DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+                Thread h = new Thread(new Avanzado(ventanaE.barra));
+                h.start();
                 salida.writeUTF("hola");//Se envia el texto en binario
                 //principal.txtArea.append("\n" + principal.txtChat.getText());
                 salida.close();//Se cierra la conexion
@@ -72,8 +74,7 @@ public class ControladorEnvio implements Runnable, ActionListener {
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
-            Thread h = new Thread(new Avanzado(ventanaE.barra));
-            h.start();
+
         }
 
         if (e.getSource() == this.ventanaE.BotonVolver) {
@@ -138,7 +139,7 @@ class Avanzado implements Runnable {
     public void run() {
         for (int i = 0; i <= 100; i++) {
             try {
-                Thread.sleep(30);
+                Thread.sleep(10);
             } catch (InterruptedException a) {
 
             }
