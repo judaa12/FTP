@@ -40,8 +40,7 @@ public class ControladorEnvio implements Runnable, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        
+
         if (e.getSource() == this.ventanaE.BotonStart) {
             ventanaE.TextoConsola.setText("");
             String texto = this.ventanaE.Texto.getText();
@@ -62,13 +61,9 @@ public class ControladorEnvio implements Runnable, ActionListener {
                 codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
             }
 
-                Thread h = new Thread(new Avanzado(ventanaE.barra));
-                h.start(); 
+            Thread h = new Thread(new Avanzado(ventanaE.barra));
+            h.start();
 
-
-
-            
-            
         }
 
         if (e.getSource() == this.ventanaE.BotonVolver) {
@@ -77,10 +72,6 @@ public class ControladorEnvio implements Runnable, ActionListener {
         }
     }
 
-    
-    
-    
-    
     private String Binario(int Decimal) {
         int R, x = 0;//variables que se implementaran
         String Binario = ""; //guarda el contenido en codigo binario
@@ -101,9 +92,6 @@ public class ControladorEnvio implements Runnable, ActionListener {
         return String.valueOf(Binario + x);//devuelve el binario resultante mas el ultimo bit
     }
 
-    
-    
-    
     @Override
     public void run() {
 
@@ -111,6 +99,8 @@ public class ControladorEnvio implements Runnable, ActionListener {
             ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
             while (true) {
                 Socket sock = socket.accept();//Se espera a que exista una conexion
+                Thread h = new Thread(new Avanzado2(ventanaE.barra));
+                h.start();
                 DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
                 String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
                 System.out.println(mensaje);
@@ -138,29 +128,53 @@ class Avanzado implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i <= 100; i++) {
-            try {
-                Thread.sleep(15);
-            } catch (InterruptedException a) {
+        try {
+            Socket sock = new Socket("192.168.100.17", 555);//Se crea el socket con el puerto y la direccion del otro computador
+            
+            for (int i = 0; i <= 100; i++) {
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException a) {
+                }
 
+                barra.setValue(i);
             }
 
-            barra.setValue(i);
+            DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+
+            salida.writeUTF("hola");//Se envia el texto en binario
+            //principal.txtArea.append("\n" + principal.txtChat.getText());
+            salida.close();//Se cierra la conexion
+
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
-        try {
 
-                Socket sock = new Socket("192.168.100.17", 555);//Se crea el socket con el puerto y la direccion del otro computador
+    }
 
-                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+}
+class Avanzado2 implements Runnable {
 
-                salida.writeUTF("hola");//Se envia el texto en binario
-                //principal.txtArea.append("\n" + principal.txtChat.getText());
-                salida.close();//Se cierra la conexion
+    JProgressBar barra;
 
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            } 
-        
+    public Avanzado2(JProgressBar barra) {
+        this.barra = barra;
+    }
+
+    @Override
+    public void run() {
+           
+            
+            for (int i = 0; i <= 100; i++) {
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException a) {
+                }
+
+                barra.setValue(i);
+            }
+
+
     }
 
 }
