@@ -8,6 +8,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JProgressBar;
 import view.Menu;
 import view.VentanaEnvio;
@@ -37,6 +40,8 @@ public class ControladorEnvio implements Runnable, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        
         if (e.getSource() == this.ventanaE.BotonStart) {
             ventanaE.TextoConsola.setText("");
             String texto = this.ventanaE.Texto.getText();
@@ -56,25 +61,14 @@ public class ControladorEnvio implements Runnable, ActionListener {
                  se le pasa por parametro el decimal correspondiente a cada letra*/
                 codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
             }
-            //this.ventanaE.TextoBinario.setText(codigoBinario);/*imprime el codigo binario completo*/
-            //textoConsola = "*/ Mensaje transformado a Binario " + "\n" + "*/ Enviando ";
-            //this.ventanaE.TextoConsola.setText(textoConsola);
 
-            try {
-
-                Socket sock = new Socket("192.168.100.17", this.port);//Se crea el socket con el puerto y la direccion del otro computador
-
-                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
                 Thread h = new Thread(new Avanzado(ventanaE.barra));
-                h.start();
-                salida.writeUTF("hola");//Se envia el texto en binario
-                //principal.txtArea.append("\n" + principal.txtChat.getText());
-                salida.close();//Se cierra la conexion
+                h.start(); 
 
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
 
+
+            
+            
         }
 
         if (e.getSource() == this.ventanaE.BotonVolver) {
@@ -83,6 +77,10 @@ public class ControladorEnvio implements Runnable, ActionListener {
         }
     }
 
+    
+    
+    
+    
     private String Binario(int Decimal) {
         int R, x = 0;//variables que se implementaran
         String Binario = ""; //guarda el contenido en codigo binario
@@ -103,6 +101,9 @@ public class ControladorEnvio implements Runnable, ActionListener {
         return String.valueOf(Binario + x);//devuelve el binario resultante mas el ultimo bit
     }
 
+    
+    
+    
     @Override
     public void run() {
 
@@ -139,14 +140,27 @@ class Avanzado implements Runnable {
     public void run() {
         for (int i = 0; i <= 100; i++) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(15);
             } catch (InterruptedException a) {
 
             }
 
             barra.setValue(i);
         }
+        try {
 
+                Socket sock = new Socket("192.168.100.17", 555);//Se crea el socket con el puerto y la direccion del otro computador
+
+                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+
+                salida.writeUTF("hola");//Se envia el texto en binario
+                //principal.txtArea.append("\n" + principal.txtChat.getText());
+                salida.close();//Se cierra la conexion
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            } 
+        
     }
 
 }
