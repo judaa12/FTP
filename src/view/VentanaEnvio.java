@@ -44,7 +44,7 @@ public class VentanaEnvio extends javax.swing.JFrame {
         TituloBinario = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TextoBinario = new javax.swing.JTextArea();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        barra = new javax.swing.JProgressBar();
         jPanel3 = new javax.swing.JPanel();
         TituloConsola = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -55,7 +55,6 @@ public class VentanaEnvio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(1270, 700));
 
         PanelPrincipal.setBackground(new java.awt.Color(255, 255, 255));
         PanelPrincipal.setPreferredSize(new java.awt.Dimension(1270, 700));
@@ -126,7 +125,7 @@ public class VentanaEnvio extends javax.swing.JFrame {
                 .addComponent(jScrollPane2))
         );
 
-        jProgressBar1.setPreferredSize(new java.awt.Dimension(1280, 50));
+        barra.setPreferredSize(new java.awt.Dimension(1280, 50));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(1000, 210));
@@ -241,7 +240,7 @@ public class VentanaEnvio extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPrincipalLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 1235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barra, javax.swing.GroupLayout.PREFERRED_SIZE, 1235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
         PanelPrincipalLayout.setVerticalGroup(
@@ -251,7 +250,7 @@ public class VentanaEnvio extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
@@ -311,12 +310,12 @@ public class VentanaEnvio extends javax.swing.JFrame {
     public javax.swing.JTextArea TextoConsola;
     private javax.swing.JLabel TituloBinario;
     private javax.swing.JLabel TituloConsola;
+    public javax.swing.JProgressBar barra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JProgressBar jProgressBar1;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

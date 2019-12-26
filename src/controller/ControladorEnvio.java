@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.awt.Color;
@@ -9,33 +8,38 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import javax.swing.JProgressBar;
 import view.Menu;
 import view.VentanaEnvio;
 
-public class ControladorEnvio implements Runnable, ActionListener{
+public class ControladorEnvio implements Runnable, ActionListener {
+
     VentanaEnvio ventanaE;
     Menu m;
     String textoConsola;
-    String Host="localhost";
-    int port=555;
-    public ControladorEnvio(VentanaEnvio ventanaE,Menu m) {
+    //String Host = "localhost";
+    int port = 555;
+
+    public ControladorEnvio(VentanaEnvio ventanaE, Menu m) {
         this.ventanaE = ventanaE;
-        this.m=m;
+        this.m = m;
         this.ventanaE.setVisible(true);
         this.ventanaE.BotonStart.addActionListener(this);
         this.ventanaE.BotonVolver.addActionListener(this);
         iniciar();
     }
-    private void iniciar(){
-        Thread hilo=new Thread(this);
+
+    private void iniciar() {
+        Thread hilo = new Thread(this);
         hilo.start();
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==this.ventanaE.BotonStart){
+        if (e.getSource() == this.ventanaE.BotonStart) {
             ventanaE.TextoConsola.setText("");
-            String texto = this.ventanaE.Texto.getText();        
+            String texto = this.ventanaE.Texto.getText();
             String codigoBinario = "";//guarda el en binario
             for (int i = 0; i < texto.length(); i++) {//recorre el texto ingresado
                 char letra = texto.charAt(i);//separa letra a letra
@@ -52,37 +56,32 @@ public class ControladorEnvio implements Runnable, ActionListener{
                  se le pasa por parametro el decimal correspondiente a cada letra*/
                 codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
             }
-            this.ventanaE.TextoBinario.setText(codigoBinario);/*imprime el codigo binario completo*/
-            textoConsola="*/ Mensaje transformado a Binario "+"\n"+"*/ Enviando ";
-            this.ventanaE.TextoConsola.setText(textoConsola);
-            
-            
+            //this.ventanaE.TextoBinario.setText(codigoBinario);/*imprime el codigo binario completo*/
+            //textoConsola = "*/ Mensaje transformado a Binario " + "\n" + "*/ Enviando ";
+            //this.ventanaE.TextoConsola.setText(textoConsola);
+
             try {
-                
-                Socket sock=new Socket(this.Host,this.port);//Se crea el socket con el puerto y la direccion del otro computador
-                
-                DataOutputStream salida=new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
-                salida.writeUTF(this.ventanaE.TextoBinario.getText());//Se envia el texto en binario
+
+                Socket sock = new Socket("192.168.100.17", this.port);//Se crea el socket con el puerto y la direccion del otro computador
+
+                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
+                salida.writeUTF("hola");//Se envia el texto en binario
                 //principal.txtArea.append("\n" + principal.txtChat.getText());
                 salida.close();//Se cierra la conexion
-                
+
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
+            Thread h = new Thread(new Avanzado(ventanaE.barra));
+            h.start();
         }
-        
-        if(e.getSource()==this.ventanaE.BotonVolver){
-            System.out.println("hola");
+
+        if (e.getSource() == this.ventanaE.BotonVolver) {
             this.ventanaE.dispose();
             this.m.setVisible(true);
         }
     }
-    
-    
-    
-    
-    
-    
+
     private String Binario(int Decimal) {
         int R, x = 0;//variables que se implementaran
         String Binario = ""; //guarda el contenido en codigo binario
@@ -101,18 +100,20 @@ public class ControladorEnvio implements Runnable, ActionListener{
             }
         }
         return String.valueOf(Binario + x);//devuelve el binario resultante mas el ultimo bit
-    }    
+    }
 
     @Override
     public void run() {
+
         try {
             ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
             while (true) {
                 Socket sock = socket.accept();//Se espera a que exista una conexion
                 DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
                 String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
-                this.ventanaE.TextoBinario.setText("Entrada\n"+mensaje);//Se muestra en pantalla el mensaje recibido
-                textoConsola="*/ Recibido "+"\n"+"*/ Transformando a texto ";
+                System.out.println(mensaje);
+                this.ventanaE.TextoBinario.setText("Entrada\n" + mensaje);//Se muestra en pantalla el mensaje recibido
+                textoConsola = "*/ Recibido " + "\n" + "*/ Transformando a texto ";
                 this.ventanaE.TextoConsola.setText(textoConsola);
                 sock.close();//Se cierra la conexion con el cliente
             }
@@ -122,5 +123,29 @@ public class ControladorEnvio implements Runnable, ActionListener{
             ex.printStackTrace();
         }
     }
-    
+
+}
+
+class Avanzado implements Runnable {
+
+    JProgressBar barra;
+
+    public Avanzado(JProgressBar barra) {
+        this.barra = barra;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i <= 100; i++) {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException a) {
+
+            }
+
+            barra.setValue(i);
+        }
+
+    }
+
 }
