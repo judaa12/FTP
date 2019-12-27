@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ import view.Menu;
 import view.VentanaEnvio;
 
 public class ControladorEnvio implements Runnable, ActionListener {
-
+    ArrayList<String> tramas=new ArrayList();
     VentanaEnvio ventanaE;
     Menu m;
     String textoConsola;
@@ -33,6 +34,7 @@ public class ControladorEnvio implements Runnable, ActionListener {
     }
 
     private void iniciar() {
+
         Thread hilo = new Thread(this);
         hilo.start();
     }
@@ -41,8 +43,9 @@ public class ControladorEnvio implements Runnable, ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == this.ventanaE.botonEnviar) {
-            ventanaE.textoMensaje.setText("");
+
             String texto = this.ventanaE.textoMensaje.getText();
+            ventanaE.textoTramas.setText("");
             String codigoBinario = "";
 
             for (int i = 0; i < texto.length(); i++) {
@@ -54,10 +57,23 @@ public class ControladorEnvio implements Runnable, ActionListener {
                         aux++;
                     }
                 }
-                codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
+                codigoBinario = codigoBinario + Binario((int) (letra)) + "";
             }
-            ventanaE.barra1.iniciar();
-            ventanaE.barra2.iniciar();
+             for(int i =0;i<codigoBinario.length();i=i+16){
+                String sub;
+                if(i==codigoBinario.length()-8){
+                    sub=codigoBinario.substring(i, i+8);
+                }else{
+                    sub=codigoBinario.substring(i, i+16);
+                }
+                
+                String trama=Entramar(sub);
+                tramas.add(trama);
+                ventanaE.textoTramas.append(trama+"\n");
+            }
+            ventanaE.barra.enviar(tramas);
+            ventanaE.barra.iniciar();
+            //ventanaE.barra1.iniciar();
         }
 
         if (e.getSource() == this.ventanaE.botonSalir) {
@@ -66,7 +82,42 @@ public class ControladorEnvio implements Runnable, ActionListener {
         }
 
     }
+private String Entramar(String binario) {
+        String delimitador = "01111110";
+        String trama = delimitador;
+        int contador = 0;
+        for (int i = 0; i < binario.length(); i++) {
+            if (binario.charAt(i) == '1') {
+                contador++;
+            } else {
+                contador = 0;
+            }
+            trama = trama + binario.charAt(i);
+            if (contador == 5) {
+                trama = trama + '0';
+            }
+        }
+        trama = trama + delimitador;
+        return trama;
+    }
 
+    private String Desentramar(String trama) {
+        String trama1 = "";
+        int contador = 0;
+        for (int i = 8; i < trama.length() - 8; i++) {
+            if (contador == 5) {
+                contador = 0;
+                continue;
+            }
+            if (trama.charAt(i) == '1') {
+                contador++;
+            } else {
+                contador = 0;
+            }
+            trama1 = trama1 + trama.charAt(i);
+        }
+        return trama1;
+    }
     private String Binario(int Decimal) {
         int R, x = 0;//variables que se implementaran
         String Binario = ""; //guarda el contenido en codigo binario
@@ -90,25 +141,26 @@ public class ControladorEnvio implements Runnable, ActionListener {
     @Override
     public void run() {
         
-//        try {
-//            ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
-//            while (true) {
-//                Socket sock = socket.accept();//Se espera a que exista una conexion
-//                Thread h = new Thread(new Avanzado2(ventanaE.barra));
-//                h.start();
-//                DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
-//                String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
-//                System.out.println(mensaje);
-//                //this.ventanaE.TextoBinario.setText("Entrada\n" + mensaje);//Se muestra en pantalla el mensaje recibido
-//                textoConsola = "*/ Recibido " + "\n" + "*/ Transformando a texto ";
-//                //this.ventanaE.TextoConsola.setText(textoConsola);
-//                sock.close();//Se cierra la conexion con el cliente
-//            }
-//
-//            //System.out.println("hola");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
+            while (true) {
+                Socket sock = socket.accept();//Se espera a que exista una conexion
+                ventanaE.barra1.iniciar();
+                DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
+                String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
+                System.out.println(mensaje);
+                ventanaE.textoConsola.append("Trama Recibida\n");
+                ventanaE.textoTramas.append(mensaje+"\n");
+                //this.ventanaE.TextoBinario.setText("Entrada\n" + mensaje);//Se muestra en pantalla el mensaje recibido
+                //textoConsola = "*/ Recibido " + "\n" + "*/ Transformando a texto ";
+                //this.ventanaE.TextoConsola.setText(textoConsola);
+                sock.close();//Se cierra la conexion con el cliente
+            }
+
+            //System.out.println("hola");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

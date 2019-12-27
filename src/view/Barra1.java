@@ -7,23 +7,19 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.DataOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  *
  * @author User
  */
-public class Barra extends javax.swing.JPanel implements Runnable {
+public class Barra1 extends javax.swing.JPanel implements Runnable {
 
-    ArrayList<String> tramas;
     /**
      * Creates new form Barra
      */
     int x = getWidth() / 2;
 
-    public Barra() {
+    public Barra1() {
         initComponents();
 
     }
@@ -34,17 +30,13 @@ public class Barra extends javax.swing.JPanel implements Runnable {
         hilo.start();
     }
 
-    public void enviar(ArrayList<String> tramas) {
-        this.tramas = tramas;
-    }
-
     public void paint(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(Color.yellow);
+        g.setColor(Color.red);
         g.fillRect(x, 0, 50, getWidth());
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -64,33 +56,25 @@ public class Barra extends javax.swing.JPanel implements Runnable {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
+            .addGap(0, 17, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public void run() {
         System.out.println(getWidth() + "   " + getHeight() + "   " + x);
-
         try {
-            for (String valor : tramas) {
-
-                Socket sock = new Socket("localhost", 555);
                 while (x < getWidth()) {
                     Thread.sleep(15);
                     x += 10;
                     repaint();
 
                 }
-                x = 0;
-                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
-                salida.writeUTF(valor);//Se envia el texto en binario
-                salida.close();//Se cierra la conexion
-            }
         } catch (Exception e) {
             System.out.println(e);
         }
-
+        x = 0;
+        
     }
 
 
