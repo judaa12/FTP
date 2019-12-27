@@ -20,56 +20,51 @@ public class ControladorEnvio implements Runnable, ActionListener {
     VentanaEnvio ventanaE;
     Menu m;
     String textoConsola;
-    //String Host = "localhost";
     int port = 555;
 
     public ControladorEnvio(VentanaEnvio ventanaE, Menu m) {
         this.ventanaE = ventanaE;
         this.m = m;
         this.ventanaE.setVisible(true);
-        this.ventanaE.BotonStart.addActionListener(this);
-        this.ventanaE.BotonVolver.addActionListener(this);
+        this.ventanaE.botonEnviar.addActionListener(this);
+        this.ventanaE.botonError.addActionListener(this);
+        this.ventanaE.botonSalir.addActionListener(this);
         iniciar();
     }
 
     private void iniciar() {
         Thread hilo = new Thread(this);
         hilo.start();
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == this.ventanaE.BotonStart) {
-            ventanaE.TextoConsola.setText("");
-            String texto = this.ventanaE.Texto.getText();
-            String codigoBinario = "";//guarda el en binario
-            for (int i = 0; i < texto.length(); i++) {//recorre el texto ingresado
-                char letra = texto.charAt(i);//separa letra a letra
-                /* si el binario de la letra es menor a 8 bit entonces se le agrega
-                 un cero a la izquierda para llenar el bit restante*/
-                int aux = Binario((int) (letra)).length();//almacena largo del binario d ela letra debuelta
-                for (int j = 0; j < 8; j++) {//recorrido de 8 characteres
-                    if (aux < 8) {//si el largo del binario es menor a 7 (0-7)entonces
-                        codigoBinario = codigoBinario + "0";//agregar 0 a la concadenacion
-                        aux++;//aumentar el largo del binario
+        if (e.getSource() == this.ventanaE.botonEnviar) {
+            ventanaE.textoMensaje.setText("");
+            String texto = this.ventanaE.textoMensaje.getText();
+            String codigoBinario = "";
+
+            for (int i = 0; i < texto.length(); i++) {
+                char letra = texto.charAt(i);
+                int aux = Binario((int) (letra)).length();
+                for (int j = 0; j < 8; j++) {
+                    if (aux < 8) {
+                        codigoBinario = codigoBinario + "0";
+                        aux++;
                     }
                 }
-                /*se concatena el binario de cada letra separado por un espacio. al metodo binario
-                 se le pasa por parametro el decimal correspondiente a cada letra*/
                 codigoBinario = codigoBinario + Binario((int) (letra)) + " ";
             }
-
-            Thread h = new Thread(new Avanzado(ventanaE.barra));
-            h.start();
-
+            ventanaE.barra1.iniciar();
+            ventanaE.barra2.iniciar();
         }
 
-        if (e.getSource() == this.ventanaE.BotonVolver) {
+        if (e.getSource() == this.ventanaE.botonSalir) {
             this.ventanaE.dispose();
             this.m.setVisible(true);
         }
+
     }
 
     private String Binario(int Decimal) {
@@ -94,26 +89,26 @@ public class ControladorEnvio implements Runnable, ActionListener {
 
     @Override
     public void run() {
-
-        try {
-            ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
-            while (true) {
-                Socket sock = socket.accept();//Se espera a que exista una conexion
-                Thread h = new Thread(new Avanzado2(ventanaE.barra));
-                h.start();
-                DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
-                String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
-                System.out.println(mensaje);
-                this.ventanaE.TextoBinario.setText("Entrada\n" + mensaje);//Se muestra en pantalla el mensaje recibido
-                textoConsola = "*/ Recibido " + "\n" + "*/ Transformando a texto ";
-                this.ventanaE.TextoConsola.setText(textoConsola);
-                sock.close();//Se cierra la conexion con el cliente
-            }
-
-            //System.out.println("hola");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        
+//        try {
+//            ServerSocket socket = new ServerSocket(555);//Se crea un socket servidor 
+//            while (true) {
+//                Socket sock = socket.accept();//Se espera a que exista una conexion
+//                Thread h = new Thread(new Avanzado2(ventanaE.barra));
+//                h.start();
+//                DataInputStream flujoentrada = new DataInputStream(sock.getInputStream());//Al recibir una entrada se crea un flujo de entrada con la direccion entrante
+//                String mensaje = flujoentrada.readUTF();//Se lee el mensaje que esta ingresando
+//                System.out.println(mensaje);
+//                //this.ventanaE.TextoBinario.setText("Entrada\n" + mensaje);//Se muestra en pantalla el mensaje recibido
+//                textoConsola = "*/ Recibido " + "\n" + "*/ Transformando a texto ";
+//                //this.ventanaE.TextoConsola.setText(textoConsola);
+//                sock.close();//Se cierra la conexion con el cliente
+//            }
+//
+//            //System.out.println("hola");
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
 }
@@ -128,6 +123,8 @@ class Avanzado implements Runnable {
 
     @Override
     public void run() {
+
+        /*
         try {
             Socket sock = new Socket("192.168.100.17", 555);//Se crea el socket con el puerto y la direccion del otro computador
             
@@ -149,10 +146,11 @@ class Avanzado implements Runnable {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-
+         */
     }
 
 }
+
 class Avanzado2 implements Runnable {
 
     JProgressBar barra;
@@ -163,17 +161,15 @@ class Avanzado2 implements Runnable {
 
     @Override
     public void run() {
-           
-            
-            for (int i = 0; i <= 100; i++) {
-                try {
-                    Thread.sleep(15);
-                } catch (InterruptedException a) {
-                }
 
-                barra.setValue(i);
+        for (int i = 0; i <= 100; i++) {
+            try {
+                Thread.sleep(15);
+            } catch (InterruptedException a) {
             }
 
+            barra.setValue(i);
+        }
 
     }
 

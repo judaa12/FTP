@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import view.Menu;
 import view.VentanaEnvio;
+import view.VentanaEnvio;
 
 public class ControladorMenu implements ActionListener{
     Menu m;
@@ -23,10 +24,11 @@ public class ControladorMenu implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==this.m.BotonSalir) System.exit(0);
-        if(e.getSource()==this.m.BotonEnviar){
+        if(e.getSource()==this.m.BotonEnviar){    
             VentanaEnvio vEnvio = new VentanaEnvio();
             ControladorEnvio cEnvio = new ControladorEnvio(vEnvio,m);
             this.m.setVisible(false);
+            
         }
     }
     
