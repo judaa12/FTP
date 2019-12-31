@@ -41,7 +41,7 @@ public class Barra extends javax.swing.JPanel implements Runnable {
     public void paint(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(Color.yellow);
+        g.setColor(new Color(51,255,102));
         g.fillRect(x, 0, 50, getWidth());
     }
 
@@ -75,7 +75,7 @@ public class Barra extends javax.swing.JPanel implements Runnable {
         try {
             for (String valor : tramas) {
 
-                Socket sock = new Socket("localhost", 555);
+                Socket sock = new Socket("192.168.100.17", 555);
                 while (x < getWidth()) {
                     Thread.sleep(15);
                     x += 10;
