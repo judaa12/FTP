@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JProgressBar;
+import javax.swing.text.BadLocationException;
 import view.Menu;
 import view.VentanaEnvio;
 
@@ -163,11 +164,11 @@ public class ControladorEnvio implements Runnable, ActionListener {
                 hilo2.start();
                 hilo1.start();
                 hilo2.join();
-
+                ventanaE.textoTramas.getDocument().remove(0, 25);
+                ventanaE.textoTramas.getDocument().remove(0, 8);
             } catch (IOException ex) {
-                Logger.getLogger(ControladorEnvio.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ControladorEnvio.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadLocationException ex) {
             }
         }
         tramas.clear();
