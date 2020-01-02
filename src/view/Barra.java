@@ -10,14 +10,14 @@ import java.awt.Graphics;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author User
  */
 public class Barra extends javax.swing.JPanel implements Runnable {
-
-    ArrayList<String> tramas;
     /**
      * Creates new form Barra
      */
@@ -27,21 +27,10 @@ public class Barra extends javax.swing.JPanel implements Runnable {
         initComponents();
 
     }
-
-    public void iniciar() {
-
-        Thread hilo = new Thread(this);
-        hilo.start();
-    }
-
-    public void enviar(ArrayList<String> tramas) {
-        this.tramas = tramas;
-    }
-
     public void paint(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(new Color(51,255,102));
+        g.setColor(new Color(51, 255, 102));
         g.fillRect(x, 0, 50, getWidth());
     }
 
@@ -72,24 +61,16 @@ public class Barra extends javax.swing.JPanel implements Runnable {
     public void run() {
         System.out.println(getWidth() + "   " + getHeight() + "   " + x);
 
-        try {
-            for (String valor : tramas) {
-
-                Socket sock = new Socket("192.168.100.17", 555);
-                while (x < getWidth()) {
-                    Thread.sleep(15);
-                    x += 10;
-                    repaint();
-
-                }
-                x = 0;
-                DataOutputStream salida = new DataOutputStream(sock.getOutputStream());//Se crea un flujo de salida de bytes con la direccion del socket
-                salida.writeUTF(valor);//Se envia el texto en binario
-                salida.close();//Se cierra la conexion
+        while (x < getWidth()) {
+            try {
+                Thread.sleep(15);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Barra.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception e) {
-            System.out.println(e);
+            x += 10;
+            repaint();
         }
+        x = 0;
 
     }
 

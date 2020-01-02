@@ -24,12 +24,6 @@ public class Barra1 extends javax.swing.JPanel implements Runnable {
 
     }
 
-    public void iniciar() {
-
-        Thread hilo = new Thread(this);
-        hilo.start();
-    }
-
     public void paint(Graphics g) {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
